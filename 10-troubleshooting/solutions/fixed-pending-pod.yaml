@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fixed-pending-pod
+  labels:
+    app: pending-demo
+spec:
+  containers:
+  - name: app
+    image: nginx:alpine
+    resources:
+      requests:
+        # Reasonable resource requests
+        cpu: "100m"
+        memory: "128Mi"
+      limits:
+        cpu: "200m"
+        memory: "256Mi"
+  # Remove problematic node selector
+  # nodeSelector:
+  #   nonexistent-label: "true"

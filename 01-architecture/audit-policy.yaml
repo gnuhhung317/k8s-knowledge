@@ -1,0 +1,28 @@
+apiVersion: audit.k8s.io/v1
+kind: Policy
+rules:
+# Log pod changes at RequestResponse level
+- level: RequestResponse
+  resources:
+  - group: ""
+    resources: ["pods"]
+  verbs: ["create", "delete", "update", "patch"]
+
+# Log deployment changes
+- level: RequestResponse
+  resources:
+  - group: "apps"
+    resources: ["deployments"]
+  verbs: ["create", "delete", "update", "patch"]
+
+# Log service changes
+- level: RequestResponse
+  resources:
+  - group: ""
+    resources: ["services"]
+  verbs: ["create", "delete", "update", "patch"]
+
+# Log all other requests at Metadata level
+- level: Metadata
+  omitStages:
+  - RequestReceived

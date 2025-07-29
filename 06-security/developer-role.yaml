@@ -1,0 +1,40 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: security-lab
+  name: developer-role
+rules:
+# Có thể đọc pods, services, configmaps
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+# Có thể tạo và update pods
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["create", "update", "patch"]
+# Có thể đọc deployments nhưng không thể xóa
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+# Có thể xem logs
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get", "list"]
+# Có thể exec vào pods (for debugging)
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: developer-cluster-role
+rules:
+# Chỉ có thể đọc nodes (for monitoring)
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list"]
+# Có thể đọc namespaces
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]

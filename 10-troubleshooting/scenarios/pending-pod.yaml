@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pending-pod
+  labels:
+    app: pending-demo
+spec:
+  containers:
+  - name: app
+    image: nginx:alpine
+    resources:
+      requests:
+        # Requesting too much CPU - will cause pending
+        cpu: "100"
+        memory: "100Gi"
+      limits:
+        cpu: "100"
+        memory: "100Gi"
+  # Node selector that doesn't match any nodes
+  nodeSelector:
+    nonexistent-label: "true"

@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-generator
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: load-generator
+  template:
+    metadata:
+      labels:
+        app: load-generator
+    spec:
+      containers:
+      - name: load-generator
+        image: busybox:1.35
+        command:
+        - /bin/sh
+        - -c
+        - |
+          while true; do
+            # Normal requests
+            for i in $(seq 1 10); do
+              wget -q -O- http://sample-app/ > /dev/null 2>&1
+              sleep 1
+            done
+            
+            # Health check requests
+            for i in $(seq 1 5); do
+              wget -q -O- http://sample-app/health > /dev/null 2>&1
+              sleep 0.5
+            done
+            
+            # Simulate some errors (404s)
+            for i in $(seq 1 2); do
+              wget -q -O- http://sample-app/nonexistent > /dev/null 2>&1
+              sleep 1
+            done
+            
+            sleep 10
+          done
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi

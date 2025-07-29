@@ -1,0 +1,32 @@
+apiVersion: example.com/v1
+kind: Database
+metadata:
+  name: postgres-db
+  namespace: default
+spec:
+  size: medium
+  version: "13.0"
+  replicas: 2
+  storage: "10Gi"
+---
+apiVersion: example.com/v1
+kind: Database
+metadata:
+  name: mysql-db
+  namespace: default
+spec:
+  size: large
+  version: "8.0"
+  replicas: 3
+  storage: "20Gi"
+---
+apiVersion: example.com/v1
+kind: Database
+metadata:
+  name: redis-db
+  namespace: default
+spec:
+  size: small
+  version: "6.2"
+  replicas: 1
+  storage: "5Gi"
